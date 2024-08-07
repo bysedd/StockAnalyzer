@@ -3,6 +3,7 @@
 Este projeto Python automatiza a coleta e análise de dados de cotações de ações, enviando um relatório por e-mail.
 
 ## Descrição
+
 Este script permite:
 
 - Coleta de dados: Obtém dados históricos de cotações de ações usando a biblioteca yfinance.
@@ -12,11 +13,12 @@ Este script permite:
 ## Funcionalidades
 
 - Coleta dados de cotações de ações do Yahoo Finance.
-- Calcula cotação máxima, mínima e média. 
+- Calcula cotação máxima, mínima e média.
 - Envia relatório por e-mail com os resultados.
 - Personalização do período de análise.
 
 ## Tecnologias Utilizadas
+
 - Python: Linguagem de programação principal.
 - yfinance: Biblioteca para coleta de dados financeiros.
 - smtplib: Biblioteca para envio de e-mails.
