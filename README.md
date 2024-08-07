@@ -56,7 +56,3 @@ Este script permite:
 
 - Certifique-se de ter as credenciais do Gmail configuradas corretamente no arquivo `.env`.
 - Para usar outros provedores de e-mail, ajuste a configuração do servidor SMTP em `send_email()`.
-
-**Licença**
-
-Este projeto está licenciado sob a licença MIT.
