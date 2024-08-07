@@ -6,8 +6,8 @@ from email.mime.text import MIMEText
 from textwrap import dedent
 from typing import Dict
 
-from yfinance import Ticker
 from dotenv import load_dotenv
+from yfinance import Ticker
 
 # Carregar variáveis de ambiente e definir credenciais
 load_dotenv()
