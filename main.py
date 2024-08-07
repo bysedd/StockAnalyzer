@@ -64,11 +64,7 @@ def send_email(subject: str, message: str, to: str) -> None:
 
     msg.attach(MIMEText(message, "plain", "utf-8"))
 
-    server.sendmail(
-        from_addr=my_email,
-        to_addrs=to,
-        msg=dedent(msg.as_string())
-    )
+    server.sendmail(from_addr=my_email, to_addrs=to, msg=dedent(msg.as_string()))
 
     server.quit()
 
