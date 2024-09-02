@@ -1,3 +1,6 @@
+### Poetry template
+poetry.lock
+
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
