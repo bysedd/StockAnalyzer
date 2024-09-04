@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 
 from dotenv import load_dotenv
 
@@ -7,15 +6,13 @@ import util
 
 
 def main() -> None:
-    # Carregar variáveis de ambiente e definir credenciais
     load_dotenv()
     my_email = os.environ["MY_EMAIL"]
     password = os.environ["PASSWORD"]
     name = os.environ["NAME"]
-    login = (my_email, password)
 
-    if not all(login):
-        print("Email or password not found in environment variables!")
+    login = (my_email, password)
+    if not util.validate_login((my_email, password)):
         exit(1)
 
     ticker = input("Digite o código da ação desejada: ")  # example: BBAS3.SA
@@ -24,11 +21,8 @@ def main() -> None:
 
     start = input("Digite a data de início (yyyy-mm-dd): ")
     end = input("Digite a data de fim (yyyy-mm-dd): ")
-    try:
-        datetime.strptime(start, "%Y-%m-%d")
-        datetime.strptime(end, "%Y-%m-%d")
-    except ValueError:
-        print("Formato de data inválido. Use (yyyy-mm-dd)")
+    datetime_format = "%Y-%m-%d"
+    if not util.validate_interval(start, end, datetime_format):
         exit(1)
 
     closure = util.collect_data(ticker, start, end)
@@ -47,7 +41,6 @@ def main() -> None:
     Atenciosamente,
     {name}
     """
-
     if util.send_email(login, subject, message, to=my_email):
         print("E-mail enviado com sucesso!")
 
