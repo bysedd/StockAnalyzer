@@ -1,4 +1,5 @@
 import smtplib
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -7,10 +8,17 @@ import yfinance as yf  # type: ignore
 
 def validate_ticker(ticker: str) -> bool:
     """
-    Função para verificar se o código da ação é válido
+    Validates the given ticker symbol.
 
-    :param ticker: Código da ação
-    :return: True se o código é válido, False caso contrário
+    Args:
+        ticker (str): The ticker symbol to be validated.
+
+    Returns:
+        bool: True if the ticker symbol is valid, False otherwise.
+
+    Raises:
+        ValueError: If the ticker symbol is not provided or \
+        if the data for the ticker symbol is not found.
     """
     if not ticker:
         raise ValueError("Código da ação não informado")
@@ -25,14 +33,58 @@ def validate_ticker(ticker: str) -> bool:
         return False
 
 
+def validate_login(login: tuple[str, str]) -> bool:
+    """
+    Validates the login credentials.
+
+    Args:
+        login (tuple[str, str]): A tuple containing the email and password.
+
+    Returns:
+        bool: True if the login credentials are valid, False otherwise.
+    """
+    if not all(login):
+        print("Email or password not found in environment variables!")
+        return False
+    return True
+
+
+def validate_interval(start: str, end: str, datetime_format: str) -> bool:
+    """
+    Validates the interval between two dates.
+
+    Args:
+        start (str): The start date of the interval.
+        end (str): The end date of the interval.
+        datetime_format (str): The format of the dates.
+
+    Returns:
+        bool: True if the interval is valid, False otherwise.
+    """
+    try:
+        datetime.strptime(start, datetime_format)
+        datetime.strptime(end, datetime_format)
+        return True
+    except ValueError:
+        print("Formato de data inválido. Use (yyyy-mm-dd)")
+        return False
+
+
 def collect_data(ticker: str, start: str, end: str) -> dict[str, float]:
     """
-    Função para coletar dados de fechamento de uma ação
+    Collects stock data for a given ticker symbol within a specified date range.
 
-    :param ticker: Código da ação
-    :param start: Período de início
-    :param end: Período de fim
-    :return: Dicionário com os valores de fechamento
+    Args:
+        ticker (str): The ticker symbol of the stock.
+        start (str): The start date of the data collection period.
+        end (str): The end date of the data collection period.
+
+    Returns:
+        dict[str, float]: A dictionary containing the maximum, minimum, and average
+        closing prices of the stock within the specified date range.
+
+    Raises:
+        ValueError: If no closing data is found for the specified stock and date range.
     """
     try:
         df = yf.Ticker(ticker).history(start=start, end=end)
@@ -51,13 +103,17 @@ def collect_data(ticker: str, start: str, end: str) -> dict[str, float]:
 
 def send_email(login: tuple[str, str], subject: str, message: str, *, to: str) -> bool:
     """
-    Função para enviar email usando o Gmail como servidor SMTP
+    Sends an email using the provided login credentials.
 
-    :param login: Tupla contendo email e senha
-    :param subject: Assunto, título do email
-    :param message: Mensagem, corpo do email
-    :param to: Destinatário do email
-    :return: True se o email foi enviado com sucesso, False caso contrário
+    Args:
+        login (tuple[str, str]): A tuple containing the email address \
+            and password for authentication.
+        subject (str): The subject of the email.
+        message (str): The content of the email.
+        to (str): The recipient's email address.
+
+    Returns:
+        bool: True if the email was sent successfully, False otherwise.
     """
     try:
         server = smtplib.SMTP("smtp.gmail.com", 587)
