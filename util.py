@@ -1,9 +1,8 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Dict
 
-from yfinance import Ticker
+import yfinance as yf  # type: ignore
 
 
 def validate_ticker(ticker: str) -> bool:
@@ -17,7 +16,7 @@ def validate_ticker(ticker: str) -> bool:
         raise ValueError("Código da ação não informado")
 
     try:
-        data = Ticker(ticker)
+        data = yf.Ticker(ticker)
         if not data.calendar:
             raise ValueError("Dados da ação não encontrados")
         return True
@@ -26,7 +25,7 @@ def validate_ticker(ticker: str) -> bool:
         return False
 
 
-def collect_data(ticker: str, start: str, end: str) -> Dict[str, float]:
+def collect_data(ticker: str, start: str, end: str) -> dict[str, float]:
     """
     Função para coletar dados de fechamento de uma ação
 
@@ -36,7 +35,7 @@ def collect_data(ticker: str, start: str, end: str) -> Dict[str, float]:
     :return: Dicionário com os valores de fechamento
     """
     try:
-        df = Ticker(ticker).history(start=start, end=end)
+        df = yf.Ticker(ticker).history(start=start, end=end)
         close = df["Close"]
         if close.empty:
             raise ValueError("Dados de fechamento não encontrados")
